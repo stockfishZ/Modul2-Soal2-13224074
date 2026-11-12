@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,40 +33,70 @@ void pop(Node **head) {
 
 void check(char *s){
     Node *head = NULL;
+    Node *res = NULL;
     char num[100]; int max;
-    int len = 0;
-    int i = 0; int j = 0;
+    int n = 0;
 
     for (int i = 0; i < strlen(s); i++){
-        if (s[i] == ' ') continue;
-        printf("read: %c\n", s[i]);
-        j = i;
-        for (int i = 0; i < strlen(s); i++){
-            if (s[j] != ' ' && s[j] != '\0'){
-                num[j-i] = s[j];
-            }else if (s[j] == ' ' || s[j] == '\0'){
-                max = j-i;
-                printf("max: '%d'\n", max);
-                break;
-            }
-            printf(" %d ", j);
+        if (s[i] == ' ' || s[i] == '\n') continue;
+
+        int j = i;
+        max = 0;
+        while (s[j] != ' ' && s[j] != '\n' && s[j] != '\0'){
+            num[max] = s[j];
+            max++;
+            j++;
         }
         num[max] = '\0';
-        printf("char: %s\n", num);
+
         int numednum = atoi(num);
-        printf("int: %d\n\n", numednum);
+        push(&head, numednum);
+        n++;
+
+        i = j - 1;
     }
+
+    for (int p = n; p >= 1; p--){
+        int depth = n - p;
+        int maxRight = 0, maxLeft = 0, h = 0;
+        int d = 0;
+        Node *cur = head;
+
+        while (cur != NULL){
+            if (d < depth && cur->h > maxRight) maxRight = cur->h;
+            if (d == depth) h = cur->h;
+            if (d > depth && cur->h > maxLeft) maxLeft = cur->h;
+            cur = cur->next;
+            d++;
+        }
+
+        if (maxLeft > h && maxRight > h) push(&res, p);
+    }
+
+    int first = 1;
+    while (res != NULL){
+        if (!first) printf(" ");
+        printf("%d", res->h);
+        first = 0;
+        pop(&res);
+    }
+    if (first) printf("NONE");
+    printf("\n");
+
+    while (head != NULL) pop(&head);
 }
 
 int main(){
     char *s = malloc(200);
     if (s == NULL) return 0;
 
-    fgets(s, sizeof(s), stdin);
-    //printf("%d", strlen(s));
+    if (fgets(s, 200, stdin) == NULL){
+        free(s);
+        return 0;
+    }
 
-    //check(s);
+    check(s);
 
-    printf("NONE");
+    free(s);
     return 0;
 }
