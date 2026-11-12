@@ -1,6 +1,7 @@
 //Rafa Satria Pratama
 //13224074 – Modul 2 – Soal 2
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
