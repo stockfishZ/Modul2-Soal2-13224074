@@ -1,3 +1,5 @@
+//Rafa Satria Pratama
+//13224074 – Modul 2 – Soal 2
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +18,7 @@ Node *node_create(int input) {
     return n;
 }
 
-int push(Node **head, char c) {
+int push(Node **head, int c) {
     Node *n = node_create(c);
     if (n == NULL) return 0;
     n->next = *head;
@@ -38,11 +40,11 @@ void check(char *s){
     int n = 0;
 
     for (int i = 0; i < strlen(s); i++){
-        if (s[i] == ' ' || s[i] == '\n') continue;
+        if (s[i] == ' ' || s[i] == '\n' || s[i] == '\r' || s[i] == '\t') continue;
 
         int j = i;
         max = 0;
-        while (s[j] != ' ' && s[j] != '\n' && s[j] != '\0'){
+        while (s[j] != ' ' && s[j] != '\n' && s[j] != '\r' && s[j] != '\t' && s[j] != '\0'){
             num[max] = s[j];
             max++;
             j++;
@@ -57,20 +59,22 @@ void check(char *s){
     }
 
     for (int p = n; p >= 1; p--){
+        if (p == 1 || p == n) continue;
+
         int depth = n - p;
-        int maxRight = 0, maxLeft = 0, h = 0;
+        int left = 0, right = 0, h = 0;
         int d = 0;
         Node *cur = head;
 
         while (cur != NULL){
-            if (d < depth && cur->h > maxRight) maxRight = cur->h;
-            if (d == depth) h = cur->h;
-            if (d > depth && cur->h > maxLeft) maxLeft = cur->h;
+            if (d == depth - 1) right = cur->h;
+            if (d == depth)     h = cur->h;
+            if (d == depth + 1) left = cur->h;
             cur = cur->next;
             d++;
         }
 
-        if (maxLeft > h && maxRight > h) push(&res, p);
+        if (left > h && right > h) push(&res, p);
     }
 
     int first = 1;
@@ -91,6 +95,7 @@ int main(){
     if (s == NULL) return 0;
 
     if (fgets(s, 200, stdin) == NULL){
+        printf("NONE\n");
         free(s);
         return 0;
     }
