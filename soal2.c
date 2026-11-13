@@ -69,7 +69,7 @@ void check(char *s){
 
         while (cur != NULL){
             if (d == depth - 1) right = cur->h;
-            if (d == depth)     h = cur->h;
+            if (d == depth) h = cur->h;
             if (d == depth + 1) left = cur->h;
             cur = cur->next;
             d++;
